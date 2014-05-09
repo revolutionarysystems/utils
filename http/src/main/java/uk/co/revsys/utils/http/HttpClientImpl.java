@@ -2,8 +2,11 @@ package uk.co.revsys.utils.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,6 +19,14 @@ public class HttpClientImpl implements HttpClient{
 		connection.setRequestMethod(request.getMethod().name());
 		for(Entry<String, String> header: request.getHeaders().entrySet()){
 			connection.setRequestProperty(header.getKey(), header.getValue());
+		}
+		if(request.getMethod().equals(HttpMethod.POST)){
+			connection.setDoOutput(true);
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
+			for(Entry<String, String> parameter: request.getParameters().entrySet()){
+				outputStreamWriter.write(parameter.getKey() + "=" + URLEncoder.encode(parameter.getValue(), "UTF-8") + "&");
+			}
+			outputStreamWriter.flush();
 		}
 		HttpResponse response = new HttpResponse();
 		response.setStatusCode(connection.getResponseCode());

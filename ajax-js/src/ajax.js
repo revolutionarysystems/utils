@@ -19,7 +19,7 @@ var Ajax = new function() {
 		if (request.data != null && request.method === "GET") {
 			url = url + "?" + request.data;
 		}
-		if(request.data != null && request.method === "POST"){
+		if(request.data != null && request.method === "POST" && request.headers["Content-Type"] == null){
 			request.headers["Content-Type"] = "application/x-www-form-urlencoded";
 		}
 		http.open(request.method, url, true);

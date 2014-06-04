@@ -1,5 +1,6 @@
 package uk.co.revsys.utils.http;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ public class HttpRequest {
 	private HttpMethod method = HttpMethod.GET;
 	private Map<String, String> headers = new HashMap<String, String>();
 	private Map<String, String> parameters = new HashMap<String, String>();
+    private InputStream body;
+    private Credentials credentials;
 	
 	public HttpRequest(String url) {
 		this.url = url;
@@ -24,6 +27,14 @@ public class HttpRequest {
 		request.setParameters(parameters);
 		return request;
 	}
+    
+    public static HttpRequest POST(String url, String contentType, InputStream body){
+        HttpRequest request = new HttpRequest(url);
+		request.setMethod(HttpMethod.POST);
+		request.setBody(body);
+        request.getHeaders().put("Content-Type", contentType);
+		return request;
+    }
 
 	public String getUrl() {
 		return url;
@@ -56,5 +67,21 @@ public class HttpRequest {
 	public void setParameters(Map<String, String> parameters) {
 		this.parameters = parameters;
 	}
+
+    public InputStream getBody() {
+        return body;
+    }
+
+    public void setBody(InputStream body) {
+        this.body = body;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+    }
 	
 }

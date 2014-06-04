@@ -1,6 +1,7 @@
 
 package uk.co.revsys.utils.http;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
@@ -63,6 +64,21 @@ public class HttpClientImplTest {
 		assertEquals(url, json.getString("url"));
 		assertEquals("value1", json.getJSONObject("headers").getString("Testheader"));
 		assertEquals("value1", json.getJSONObject("form").getString("param1"));
+	}
+    
+    @Test
+	public void testInvoke_PostBody() throws Exception {
+		String url = "http://httpbin.org/post";
+        String body = "This is a test";
+		HttpRequest request = HttpRequest.POST(url, "text/plain", new ByteArrayInputStream(body.getBytes()));
+		HttpClientImpl httpClient = new HttpClientImpl();
+		HttpResponse response = httpClient.invoke(request);
+		assertEquals("application/json", response.getContentType());
+		String responseBody = IOUtils.toString(response.getInputStream());
+		System.out.println("responseBody = " + responseBody);
+		JSONObject json = new JSONObject(responseBody);
+		assertEquals(url, json.getString("url"));
+		assertEquals(body, json.getString("data"));
 	}
 
 }

@@ -22,12 +22,16 @@ public class HttpClientImpl implements HttpClient{
             for(Entry<String, String> parameter: request.getParameters().entrySet()){
                 query.append(parameter.getKey()).append("=").append(URLEncoder.encode(parameter.getValue(), "UTF-8")).append("&");
             }
+            String queryString = query.toString();
+            if(queryString.endsWith("&")){
+                queryString = queryString.substring(0, queryString.length()-1);
+            }
             if(!url.contains("?")){
                 url = url + "?";
             }else{
                 url = url + "&";
             }
-            url = url + query.toString();
+            url = url + queryString;
         }
         System.out.println("Sending request to " + url);
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

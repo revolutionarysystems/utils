@@ -11,6 +11,7 @@
     <modules>
         <module>http</module>
         <module>spring</module>
+        <module>servlet</module>
     </modules>
     
 	<build>

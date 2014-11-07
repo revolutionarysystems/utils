@@ -12,6 +12,7 @@
         <module>http</module>
         <module>spring</module>
         <module>servlet</module>
+        <module>mongodb</module>
     </modules>
     
 	<build>

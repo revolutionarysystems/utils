@@ -6,9 +6,11 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.io.IOUtils;
 
 public class HttpClientImpl implements HttpClient{
@@ -19,8 +21,15 @@ public class HttpClientImpl implements HttpClient{
         System.out.println("url = " + url);
         if(request.getMethod().equals(HttpMethod.GET)){
             StringBuilder query = new StringBuilder();
-            for(Entry<String, String> parameter: request.getParameters().entrySet()){
-                query.append(parameter.getKey()).append("=").append(URLEncoder.encode(parameter.getValue(), "UTF-8")).append("&");
+            MultiValueMap parameters = request.getParameters();
+            Iterator keyIterator = parameters.keySet().iterator();
+            while(keyIterator.hasNext()){
+                String key = (String)keyIterator.next();
+                Iterator valueIterator = parameters.iterator(key);
+                while(valueIterator.hasNext()){
+                    String value = (String)valueIterator.next();
+                    query.append(key).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
+                }
             }
             String queryString = query.toString();
             if(queryString.endsWith("&")){
@@ -46,9 +55,16 @@ public class HttpClientImpl implements HttpClient{
         if(request.getMethod().equals(HttpMethod.POST)){
 			connection.setDoOutput(true);
 			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
-			for(Entry<String, String> parameter: request.getParameters().entrySet()){
-				outputStreamWriter.write(parameter.getKey() + "=" + URLEncoder.encode(parameter.getValue(), "UTF-8") + "&");
-			}
+            MultiValueMap parameters = request.getParameters();
+            Iterator keyIterator = parameters.keySet().iterator();
+            while(keyIterator.hasNext()){
+                String key = (String)keyIterator.next();
+                Iterator valueIterator = parameters.iterator(key);
+                while(valueIterator.hasNext()){
+                    String value = (String)valueIterator.next();
+                    outputStreamWriter.write(key + "=" + URLEncoder.encode(value, "UTF-8") + "&");
+                }
+            }
             InputStream body = request.getBody();
             if(body!=null){
                 IOUtils.copy(body, outputStreamWriter);

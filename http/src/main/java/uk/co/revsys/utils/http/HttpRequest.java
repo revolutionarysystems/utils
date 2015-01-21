@@ -3,13 +3,14 @@ package uk.co.revsys.utils.http;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.collections.map.MultiValueMap;
 
 public class HttpRequest {
 
 	private String url;
 	private HttpMethod method = HttpMethod.GET;
 	private Map<String, String> headers = new HashMap<String, String>();
-	private Map<String, String> parameters = new HashMap<String, String>();
+	private MultiValueMap parameters = new MultiValueMap();
     private InputStream body;
     private Credentials credentials;
 	
@@ -21,7 +22,7 @@ public class HttpRequest {
 		return new HttpRequest(url);
 	}
 	
-	public static HttpRequest POST(String url, Map<String, String> parameters){
+	public static HttpRequest POST(String url, MultiValueMap parameters){
 		HttpRequest request = new HttpRequest(url);
 		request.setMethod(HttpMethod.POST);
 		request.setParameters(parameters);
@@ -60,11 +61,11 @@ public class HttpRequest {
 		this.headers = headers;
 	}
 
-	public Map<String, String> getParameters() {
+	public MultiValueMap getParameters() {
 		return parameters;
 	}
-
-	public void setParameters(Map<String, String> parameters) {
+    
+	public void setParameters(MultiValueMap parameters) {
 		this.parameters = parameters;
 	}
 

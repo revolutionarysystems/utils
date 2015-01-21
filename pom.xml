@@ -11,6 +11,7 @@
     <modules>
         <module>http</module>
         <module>spring</module>
+        <module>spring-web</module>
         <module>servlet</module>
         <module>mongodb</module>
     </modules>

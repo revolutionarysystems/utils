@@ -47,7 +47,7 @@ public class JSONPFilter implements Filter {
 
     @Override
     public void init(FilterConfig fc) throws ServletException {
-        callbackPattern = Pattern.compile("[A-Za-z0-9]+");
+        callbackPattern = Pattern.compile("[A-Za-z0-9\\.]+");
     }
 
     @Override

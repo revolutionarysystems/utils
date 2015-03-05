@@ -18,7 +18,6 @@ public class HttpClientImpl implements HttpClient{
 	@Override
 	public HttpResponse invoke(HttpRequest request) throws IOException {
         String url = request.getUrl();
-        System.out.println("url = " + url);
         if(request.getMethod().equals(HttpMethod.GET)){
             StringBuilder query = new StringBuilder();
             MultiValueMap parameters = request.getParameters();
@@ -42,7 +41,6 @@ public class HttpClientImpl implements HttpClient{
             }
             url = url + queryString;
         }
-        System.out.println("Sending request to " + url);
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 		connection.setRequestMethod(request.getMethod().name());
         Credentials credentials = request.getCredentials();

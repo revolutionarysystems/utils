@@ -77,6 +77,10 @@ public class HttpClientImpl implements HttpClient{
 		for (String headerKey : headerFields.keySet()) {
 			if (headerKey != null) {
 				for (String headerValue : headerFields.get(headerKey)) {
+                    if(headerKey.equals("Set-Cookie")){
+                        HttpCookie cookie = parseCookieString(headerValue);
+                        response.getCookies().put(cookie.getName(), cookie);
+                    }
 					response.getHeaders().put(headerKey, headerValue);
 				}
 			}
@@ -90,5 +94,14 @@ public class HttpClientImpl implements HttpClient{
 		response.setInputStream(inputStream);
 		return response;
 	}
+    
+    private HttpCookie parseCookieString(String cookieString){
+        HttpCookie cookie = new HttpCookie();
+        String name = cookieString.substring(0, cookieString.indexOf("=")).trim();
+        String value = cookieString.substring(cookieString.indexOf("=")+1, cookieString.indexOf(";")).trim();
+        cookie.setName(name);
+        cookie.setValue(value);
+        return cookie;
+    }
 
 }
